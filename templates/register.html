@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2efe7">
+    <title>Create account | Gym Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <main class="auth-layout auth-layout--register">
+        <aside class="brand-panel" aria-label="Gym Planner brand">
+            <a class="wordmark wordmark--light" href="/" aria-label="Gym Planner home">
+                <span class="wordmark-strong">GYM</span><span class="wordmark-light">PLANNER</span>
+            </a>
+
+            <div class="brand-detail">MEMBERSHIPS <span>•</span> WORKOUTS <span>•</span> PROGRESS</div>
+
+            <div class="hero-image-wrap">
+                <img class="hero-image" src="/static/gym-editorial.jpg" alt="Athletes training with weights in a gym">
+            </div>
+
+            <div class="brand-statement">
+                <p class="eyebrow eyebrow--light">GOOD HABITS, BUILT DAILY</p>
+                <h2>Your work.<br>Your progress.</h2>
+                <p class="brand-copy">Make room for stronger routines and measurable progress.</p>
+            </div>
+            <div class="brand-footer"><span>ONE REP AT A TIME</span><span class="footer-rule"></span></div>
+        </aside>
+
+        <section class="form-panel" aria-labelledby="page-title">
+            <div class="form-topline">
+                <span class="topline-label">BECOME A MEMBER</span>
+                <span class="topline-number">02 <span>/</span> 02</span>
+            </div>
+
+            <div class="form-content form-content--register">
+                <p class="eyebrow">GET STARTED</p>
+                <h1 id="page-title">Start your<br>journey.</h1>
+                <p class="form-intro">Create your account and bring your fitness routine into focus.</p>
+
+                <form class="auth-form" autocomplete="on">
+                    <div class="field-group">
+                        <label for="name">Full name</label>
+                        <input class="text-input" id="name" name="name" type="text" placeholder="Enter your full name" autocomplete="name" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="email">Email address</label>
+                        <input class="text-input" id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="label-row">
+                            <label for="password">Password</label>
+                            <button class="text-control" type="button" data-password-toggle="password" aria-controls="password" aria-pressed="false">Show</button>
+                        </div>
+                        <input class="text-input" id="password" name="password" type="password" minlength="8" placeholder="At least 8 characters" autocomplete="new-password" required>
+                        <p class="field-note">Use at least 8 characters.</p>
+                    </div>
+
+                    <button class="submit-button" type="submit"><span>Create account</span><span class="button-arrow" aria-hidden="true">→</span></button>
+                </form>
+
+                <p class="form-switch">Already a member? <a href="/login">Sign in <span aria-hidden="true">↗</span></a></p>
+            </div>
+            <div class="form-footnote"><span>SHOW UP. GET STRONGER.</span><span>GYM PLANNER</span></div>
+        </section>
+    </main>
+
+    <script>
+        document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const input = document.getElementById(button.dataset.passwordToggle);
+                const isVisible = input.type === "text";
+                input.type = isVisible ? "password" : "text";
+                button.textContent = isVisible ? "Show" : "Hide";
+                button.setAttribute("aria-pressed", String(!isVisible));
+            });
+        });
+    </script>
+</body>
+</html>
