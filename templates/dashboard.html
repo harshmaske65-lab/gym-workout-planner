@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2efe7">
+    <title>Member Dashboard | Gym Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body.dashboard-body { margin: 0; min-height: 100vh; background: #f2efe7; color: #21241f; font-family: Manrope, sans-serif; }
+        .dashboard-wrap { max-width: 1120px; margin: 0 auto; padding: 34px 28px 60px; }
+        .dashboard-nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid #d1cec3; }
+        .dashboard-wordmark { text-decoration: none; color: #21241f; font: 700 18px 'Space Grotesk', sans-serif; letter-spacing: -.04em; }
+        .dashboard-wordmark span { font-weight: 400; }
+        .dashboard-nav-actions { display: flex; align-items: center; gap: 12px; }
+        .dashboard-plans-link { color: #21241f; text-decoration: none; font-size: 12px; font-weight: 700; }
+        .logout-button { border: 1px solid #c8c5ba; background: transparent; padding: 10px 15px; border-radius: 5px; color: #21241f; font: 600 13px Manrope, sans-serif; cursor: pointer; }
+        .logout-button:hover { background: #e6e3d9; }
+        .dashboard-hero { padding: 62px 0 44px; max-width: 760px; }
+        .dashboard-eyebrow { color: #656b55; font-size: 11px; letter-spacing: .14em; font-weight: 700; }
+        .dashboard-hero h1 { margin: 13px 0 14px; font: 600 clamp(36px, 5vw, 60px)/1.04 'Space Grotesk', sans-serif; letter-spacing: -.055em; }
+        .dashboard-hero p { max-width: 580px; color: #65665e; line-height: 1.75; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        .dashboard-card { min-height: 170px; padding: 24px; border: 1px solid #d1cec3; background: #f9f8f4; display: flex; flex-direction: column; justify-content: space-between; }
+        .dashboard-card small { color: #656b55; letter-spacing: .1em; font-size: 10px; font-weight: 700; }
+        .dashboard-card h2 { font: 600 23px 'Space Grotesk', sans-serif; margin: 22px 0 8px; }
+        .dashboard-card p { color: #65665e; font-size: 13px; line-height: 1.65; margin: 0 0 15px; }
+        .card-link { color: #656b55; font-weight: 800; font-size: 12px; text-decoration: none; }
+        .card-link:hover { text-decoration: underline; }
+        .dashboard-footer { padding-top: 28px; color: #77776f; font-size: 10px; letter-spacing: .12em; }
+        @media (max-width: 720px) { .dashboard-wrap { padding: 22px 18px 40px; } .dashboard-hero { padding: 44px 0 30px; } .dashboard-grid { grid-template-columns: 1fr; } .dashboard-card { min-height: 135px; } }
+    </style>
+</head>
+<body class="dashboard-body">
+    <main class="dashboard-wrap">
+        <nav class="dashboard-nav" aria-label="Member navigation">
+            <a href="/dashboard" class="dashboard-wordmark">GYM <span>PLANNER</span></a>
+            <div class="dashboard-nav-actions">
+                <a class="dashboard-plans-link" href="/membership-plans">Membership plans ↗</a>
+                <form method="post" action="/logout"><button class="logout-button" type="submit">Sign out ↗</button></form>
+            </div>
+        </nav>
+        <section class="dashboard-hero">
+            <div class="dashboard-eyebrow">MEMBER DASHBOARD</div>
+            <h1>Good to have you here,<br>{{ user.full_name }}.</h1>
+            <p>Your personal space for memberships, workout planning, and progress. Choose a plan that fits your routine, then keep building consistency.</p>
+        </section>
+        <section class="dashboard-grid" aria-label="Member dashboard sections">
+            <article class="dashboard-card"><div><small>01 / MEMBERSHIP</small><h2>Find your plan</h2><p>Compare the available memberships and find the right fit for your goals.</p></div><a class="card-link" href="/membership-plans">Browse membership plans ↗</a></article>
+            <article class="dashboard-card"><div><small>02 / TRAINING</small><h2>Workout planner</h2><p>Build and organise your training routine here as the feature is developed.</p></div></article>
+            <article class="dashboard-card"><div><small>03 / PROGRESS</small><h2>Your progress</h2><p>Track consistency and see your progress over time as your tools grow.</p></div></article>
+        </section>
+        <div class="dashboard-footer">SHOW UP. GET STRONGER. · GYM PLANNER MEMBER AREA</div>
+    </main>
+</body>
+</html>

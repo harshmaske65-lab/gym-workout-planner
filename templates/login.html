@@ -9,6 +9,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .auth-message { padding: 12px 14px; margin: 0 0 18px; border: 1px solid; border-radius: 6px; font-size: 0.88rem; line-height: 1.5; }
+        .auth-message--error { color: #8a2929; background: #fff0ed; border-color: #e8bcb4; }
+        .auth-message--success { color: #35482f; background: #edf3e8; border-color: #c7d6bb; }
+    </style>
 </head>
 <body>
     <main class="auth-layout">
@@ -42,10 +47,20 @@
                 <h1 id="page-title">Your next session<br>starts here.</h1>
                 <p class="form-intro">Sign in to check your membership and pick up where you left off.</p>
 
-                <form class="auth-form" autocomplete="on">
+                {% if registered %}
+                    <p class="auth-message auth-message--success" role="status">Account created successfully. Please sign in.</p>
+                {% endif %}
+                {% if logged_out %}
+                    <p class="auth-message auth-message--success" role="status">You have been signed out successfully.</p>
+                {% endif %}
+                {% if error %}
+                    <p class="auth-message auth-message--error" role="alert">{{ error }}</p>
+                {% endif %}
+
+                <form class="auth-form" method="post" action="/login" autocomplete="on">
                     <div class="field-group">
                         <label for="email">Email address</label>
-                        <input class="text-input" id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                        <input class="text-input" id="email" name="email" type="email" value="{{ form_email }}" placeholder="you@example.com" autocomplete="email" maxlength="255" required>
                     </div>
 
                     <div class="field-group">

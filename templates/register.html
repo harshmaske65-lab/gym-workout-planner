@@ -9,6 +9,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .form-error {
+            margin: 0 0 1rem;
+            padding: 0.75rem 0.9rem;
+            border: 1px solid #d9aaa3;
+            border-radius: 6px;
+            background: #fbefed;
+            color: #8d3028;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
     <main class="auth-layout auth-layout--register">
@@ -42,27 +54,69 @@
                 <h1 id="page-title">Start your<br>journey.</h1>
                 <p class="form-intro">Create your account and bring your fitness routine into focus.</p>
 
-                <form class="auth-form" autocomplete="on">
+                {% if error %}
+                    <p class="form-error" role="alert">{{ error }}</p>
+                {% endif %}
+
+                <form class="auth-form" method="post" action="/register" autocomplete="on">
                     <div class="field-group">
                         <label for="name">Full name</label>
-                        <input class="text-input" id="name" name="name" type="text" placeholder="Enter your full name" autocomplete="name" required>
+                        <input
+                            class="text-input"
+                            id="name"
+                            name="name"
+                            type="text"
+                            value="{{ form_name }}"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            maxlength="100"
+                            required
+                        >
                     </div>
 
                     <div class="field-group">
                         <label for="email">Email address</label>
-                        <input class="text-input" id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                        <input
+                            class="text-input"
+                            id="email"
+                            name="email"
+                            type="email"
+                            value="{{ form_email }}"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            maxlength="255"
+                            required
+                        >
                     </div>
 
                     <div class="field-group">
                         <div class="label-row">
                             <label for="password">Password</label>
-                            <button class="text-control" type="button" data-password-toggle="password" aria-controls="password" aria-pressed="false">Show</button>
+                            <button
+                                class="text-control"
+                                type="button"
+                                data-password-toggle="password"
+                                aria-controls="password"
+                                aria-pressed="false"
+                            >Show</button>
                         </div>
-                        <input class="text-input" id="password" name="password" type="password" minlength="8" placeholder="At least 8 characters" autocomplete="new-password" required>
+                        <input
+                            class="text-input"
+                            id="password"
+                            name="password"
+                            type="password"
+                            minlength="8"
+                            placeholder="At least 8 characters"
+                            autocomplete="new-password"
+                            required
+                        >
                         <p class="field-note">Use at least 8 characters.</p>
                     </div>
 
-                    <button class="submit-button" type="submit"><span>Create account</span><span class="button-arrow" aria-hidden="true">→</span></button>
+                    <button class="submit-button" type="submit">
+                        <span>Create account</span>
+                        <span class="button-arrow" aria-hidden="true">→</span>
+                    </button>
                 </form>
 
                 <p class="form-switch">Already a member? <a href="/login">Sign in <span aria-hidden="true">↗</span></a></p>

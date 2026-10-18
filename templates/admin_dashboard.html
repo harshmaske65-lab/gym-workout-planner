@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2efe7">
+    <title>Admin Dashboard | Gym Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --cream:#f2efe7; --ink:#21241f; --olive:#656b55; --line:#d1cec3; --panel:#f9f8f4; --muted:#66675f; }
+        * { box-sizing:border-box; }
+        body { margin:0; min-height:100vh; background:var(--cream); color:var(--ink); font-family:Manrope,sans-serif; }
+        a { color:inherit; }
+        .shell { max-width:1220px; margin:0 auto; padding:28px 26px 58px; }
+        .nav { display:flex; align-items:center; justify-content:space-between; gap:18px; padding-bottom:22px; border-bottom:1px solid var(--line); }
+        .brand { text-decoration:none; font:700 19px 'Space Grotesk',sans-serif; letter-spacing:-.05em; }
+        .brand span { font-weight:400; }
+        .nav-right { display:flex; align-items:center; flex-wrap:wrap; gap:14px; }
+        .nav-link { font-size:12px; font-weight:700; text-decoration:none; }
+        .button { border:1px solid #c8c5ba; background:transparent; color:var(--ink); padding:10px 14px; border-radius:5px; cursor:pointer; text-decoration:none; font:600 12px Manrope,sans-serif; }
+        .button:hover { background:#e6e3d9; }
+        .eyebrow { color:var(--olive); font-size:10px; letter-spacing:.15em; font-weight:800; }
+        .hero { padding:42px 0 28px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; }
+        h1 { margin:10px 0 9px; font:600 clamp(34px,5vw,54px)/1.04 'Space Grotesk',sans-serif; letter-spacing:-.06em; }
+        .hero p { margin:0; max-width:600px; color:var(--muted); font-size:13px; line-height:1.7; }
+        .admin-tag { white-space:nowrap; border:1px solid #bdc3ad; background:#e7eadf; color:#47503a; padding:8px 10px; font-size:10px; letter-spacing:.1em; font-weight:800; }
+        .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:10px 0 36px; }
+        .stat { background:var(--panel); border:1px solid var(--line); padding:19px 21px; }
+        .stat-label { color:var(--olive); font-size:10px; letter-spacing:.1em; font-weight:800; }
+        .stat-number { margin-top:12px; font:600 34px 'Space Grotesk',sans-serif; letter-spacing:-.04em; }
+        .stat-detail { margin-top:3px; color:var(--muted); font-size:12px; }
+        .section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:13px; }
+        h2 { margin:0; font:600 25px 'Space Grotesk',sans-serif; letter-spacing:-.04em; }
+        .section-note { color:var(--muted); font-size:12px; }
+        .table-wrap { overflow-x:auto; border:1px solid var(--line); background:var(--panel); }
+        table { width:100%; border-collapse:collapse; text-align:left; min-width:620px; }
+        th { color:var(--olive); font-size:10px; letter-spacing:.1em; font-weight:800; text-transform:uppercase; background:#eeece4; }
+        th,td { border-bottom:1px solid #e1ded4; padding:14px 16px; font-size:12px; }
+        tbody tr:last-child td { border-bottom:0; }
+        td { color:#383a34; }
+        .member-name { color:var(--ink); font-weight:800; }
+        .role-pill { display:inline-block; padding:5px 8px; border:1px solid #d1d8c5; background:#edf0e7; color:#4c573d; border-radius:3px; font-size:10px; font-weight:800; }
+        .plans-section { margin-top:38px; }
+        .plan-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:14px; }
+        .plan { padding:20px; background:var(--panel); border:1px solid var(--line); }
+        .plan-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+        .plan h3 { margin:15px 0 5px; font:600 22px 'Space Grotesk',sans-serif; }
+        .price { font:600 25px 'Space Grotesk',sans-serif; }
+        .muted { color:var(--muted); font-size:12px; line-height:1.6; }
+        .status { font-size:9px; letter-spacing:.08em; font-weight:800; padding:5px 7px; border:1px solid var(--line); }
+        .status--active { color:#43543b; background:#e7eddf; border-color:#cbd5bf; }
+        .status--inactive { color:#8b4136; background:#f7e8e4; border-color:#e4c3ba; }
+        .footer { padding-top:30px; color:#77776f; font-size:10px; letter-spacing:.12em; }
+        @media (max-width:760px) { .shell{padding:22px 17px 40px}.hero{align-items:flex-start;flex-direction:column}.stats,.plan-list{grid-template-columns:1fr}.stat{padding:16px}.section-head{align-items:flex-start;flex-direction:column}.nav{align-items:flex-start}.nav-right{justify-content:flex-end} }
+    </style>
+</head>
+<body>
+<main class="shell">
+    <nav class="nav" aria-label="Admin navigation">
+        <a href="/admin/dashboard" class="brand">GYM <span>PLANNER</span></a>
+        <div class="nav-right">
+            <a class="nav-link" href="/membership-plans">Public plans ↗</a>
+            <form method="post" action="/logout"><button class="button" type="submit">Sign out ↗</button></form>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <div class="eyebrow">ADMIN / CONTROL CENTRE</div>
+            <h1>Good evening,<br>{{ user.full_name }}.</h1>
+            <p>Manage the Gym Planner overview from one place. This is the administrative view, separate from the member experience.</p>
+        </div>
+        <span class="admin-tag">ADMIN ACCESS</span>
+    </section>
+
+    <section class="stats" aria-label="Platform summary">
+        <article class="stat"><div class="stat-label">REGISTERED MEMBERS</div><div class="stat-number">{{ member_count }}</div><div class="stat-detail">Regular user accounts</div></article>
+        <article class="stat"><div class="stat-label">ALL PLANS</div><div class="stat-number">{{ plan_count }}</div><div class="stat-detail">Membership plans in the database</div></article>
+        <article class="stat"><div class="stat-label">ACTIVE PLANS</div><div class="stat-number">{{ active_plan_count }}</div><div class="stat-detail">Currently shown on the public page</div></article>
+    </section>
+
+    <section aria-labelledby="members-title">
+        <div class="section-head"><div><div class="eyebrow">PEOPLE / ACCOUNTS</div><h2 id="members-title">Registered members</h2></div><div class="section-note">Newest accounts first</div></div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Name</th><th>Email</th><th>Joined</th><th>Role</th></tr></thead>
+                <tbody>
+                {% for member in members %}
+                    <tr><td class="member-name">{{ member.full_name }}</td><td>{{ member.email }}</td><td>{{ member.created_at.strftime('%d %b %Y') if member.created_at else '—' }}</td><td><span class="role-pill">MEMBER</span></td></tr>
+                {% else %}
+                    <tr><td colspan="4">No regular members have registered yet.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="plans-section" aria-labelledby="plans-title">
+        <div class="section-head"><div><div class="eyebrow">OFFERING / MEMBERSHIPS</div><h2 id="plans-title">Membership plans</h2></div><a class="button" href="/membership-plans">View public page ↗</a></div>
+        <div class="plan-list">
+        {% for plan in plans %}
+            <article class="plan">
+                <div class="plan-top"><span class="eyebrow">PLAN 0{{ loop.index }}</span><span class="status {{ 'status--active' if plan.is_active else 'status--inactive' }}">{{ 'ACTIVE' if plan.is_active else 'INACTIVE' }}</span></div>
+                <h3>{{ plan.name }}</h3>
+                <div class="price">₹{{ '{:,.0f}'.format(plan.price_monthly) }}<span class="muted"> / month</span></div>
+                <p class="muted">{{ plan.description }}</p>
+            </article>
+        {% else %}
+            <p class="muted">No plans have been created yet.</p>
+        {% endfor %}
+        </div>
+    </section>
+    <footer class="footer">SHOW UP. GET STRONGER. · GYM PLANNER ADMIN</footer>
+</main>
+</body>
+</html>

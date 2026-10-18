@@ -1,0 +1,94 @@
+:root {
+    --cream: #f2efe7;
+    --surface: #f9f8f4;
+    --ink: #21241f;
+    --muted: #65665e;
+    --olive: #656b55;
+    --line: #d1cec3;
+    --featured: #252820;
+    --featured-muted: #c7c8bc;
+}
+
+* { box-sizing: border-box; }
+html { min-height: 100%; }
+body.plans-body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Manrope", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+.plans-shell { max-width: 1220px; margin: 0 auto; padding: 30px 34px 24px; }
+.plans-nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.plans-wordmark { color: var(--ink); text-decoration: none; font: 700 18px/1 "Space Grotesk", sans-serif; letter-spacing: -.045em; }
+.plans-wordmark span { font-weight: 400; }
+.plans-nav-actions { display: flex; align-items: center; gap: 22px; }
+.nav-link { text-decoration: none; font-size: 12px; font-weight: 700; }
+.nav-link span, .bottom-link span { padding-left: 4px; }
+.nav-link:hover, .bottom-link:hover { color: var(--olive); }
+.nav-button { padding: 11px 16px; border: 1px solid var(--ink); background: var(--ink); color: white; text-decoration: none; font-size: 12px; font-weight: 700; transition: background .18s ease, color .18s ease; }
+.nav-button:hover { background: transparent; color: var(--ink); }
+.plans-intro { padding: 64px 0 26px; max-width: 800px; }
+.plans-eyebrow { margin: 0; color: var(--olive); font-size: 10px; font-weight: 800; letter-spacing: .16em; }
+.plans-intro h1 { margin: 16px 0 18px; font: 600 clamp(48px, 7.1vw, 88px)/.94 "Space Grotesk", sans-serif; letter-spacing: -.075em; }
+.plans-intro h1 span { color: var(--olive); }
+.plans-lede { max-width: 510px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
+.plans-intro-foot { display: flex; justify-content: space-between; gap: 20px; margin-top: 45px; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: #77776f; font-size: 9px; font-weight: 700; letter-spacing: .13em; }
+.plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-top: 16px; }
+.plan-card { position: relative; display: flex; flex-direction: column; min-height: 420px; padding: 25px 24px 23px; background: var(--surface); border: 1px solid var(--line); }
+.plan-card--featured { background: var(--featured); color: var(--surface); border-color: var(--featured); }
+.plan-card-top { display: flex; justify-content: space-between; align-items: flex-start; min-height: 25px; gap: 8px; }
+.plan-kicker { font-size: 9px; font-weight: 800; letter-spacing: .14em; color: var(--olive); }
+.plan-card--featured .plan-kicker { color: #c8d0ae; }
+.popular-tag { padding: 6px 7px; background: #dfe4d2; color: #303829; font-size: 8px; font-weight: 800; letter-spacing: .09em; white-space: nowrap; }
+.plan-heading { margin-top: 23px; }
+.plan-heading h2 { margin: 0; font: 600 31px/1.1 "Space Grotesk", sans-serif; letter-spacing: -.055em; }
+.plan-tagline { margin: 9px 0 0; font-size: 12px; color: var(--olive); font-weight: 700; }
+.plan-card--featured .plan-tagline { color: #c8d0ae; }
+.plan-description { min-height: 42px; margin: 18px 0 17px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.plan-card--featured .plan-description { color: var(--featured-muted); }
+.plan-price { display: flex; align-items: baseline; gap: 3px; margin: 0 0 21px; font: 600 clamp(32px, 3vw, 42px)/1 "Space Grotesk", sans-serif; letter-spacing: -.06em; }
+.currency { font: 500 20px/1 "Manrope", sans-serif; letter-spacing: 0; }
+.per-month { margin-left: 4px; color: var(--muted); font: 500 11px/1.2 "Manrope", sans-serif; letter-spacing: 0; }
+.plan-card--featured .per-month { color: var(--featured-muted); }
+.plan-divider { height: 1px; background: var(--line); }
+.plan-card--featured .plan-divider { background: #4c4f45; }
+.features-label { margin: 19px 0 12px; color: var(--olive); font-size: 9px; font-weight: 800; letter-spacing: .13em; }
+.plan-card--featured .features-label { color: #c8d0ae; }
+.plan-features { list-style: none; display: grid; gap: 11px; margin: 0; padding: 0; }
+.plan-features li { display: flex; align-items: flex-start; gap: 9px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.plan-card--featured .plan-features li { color: #e2e2da; }
+.feature-check { flex: 0 0 auto; color: var(--olive); font-weight: 800; }
+.plan-card--featured .feature-check { color: #c8d0ae; }
+.empty-plans { grid-column: 1 / -1; padding: 30px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+.plans-bottom { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin-top: 54px; padding: 26px 0 30px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.plans-bottom h2 { margin: 10px 0 7px; font: 600 clamp(23px, 3vw, 32px)/1.2 "Space Grotesk", sans-serif; letter-spacing: -.045em; }
+.plans-bottom p:not(.plans-eyebrow) { margin: 0; max-width: 570px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.bottom-link { flex: 0 0 auto; padding-bottom: 6px; border-bottom: 1px solid var(--olive); color: var(--ink); text-decoration: none; font-size: 12px; font-weight: 800; }
+.plans-footer { display: flex; justify-content: space-between; gap: 20px; padding-top: 22px; color: #77776f; font-size: 9px; font-weight: 700; letter-spacing: .12em; }
+
+@media (max-width: 900px) {
+    .plans-shell { padding-right: 24px; padding-left: 24px; }
+    .plan-grid { grid-template-columns: 1fr 1fr; }
+    .plan-card { min-height: 400px; }
+    .plan-card:last-child { grid-column: 1 / -1; min-height: 0; }
+}
+@media (max-width: 600px) {
+    .plans-shell { padding: 21px 17px 20px; }
+    .plans-nav { padding-bottom: 18px; }
+    .plans-nav-actions { gap: 12px; }
+    .nav-link { font-size: 11px; }
+    .nav-button { padding: 10px 11px; font-size: 11px; }
+    .plans-intro { padding-top: 46px; }
+    .plans-intro h1 { font-size: clamp(49px, 14vw, 70px); }
+    .plans-lede { font-size: 13px; }
+    .plans-intro-foot { margin-top: 32px; font-size: 8px; }
+    .plans-intro-foot span:last-child { text-align: right; }
+    .plan-grid { grid-template-columns: 1fr; gap: 12px; }
+    .plan-card, .plan-card:last-child { grid-column: auto; min-height: 0; padding: 23px 21px; }
+    .plan-description { min-height: 0; }
+    .plans-bottom { align-items: flex-start; flex-direction: column; margin-top: 36px; }
+    .plans-footer { flex-direction: column; gap: 8px; }
+}
