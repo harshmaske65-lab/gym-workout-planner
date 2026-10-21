@@ -2,18 +2,18 @@ import os
 import secrets
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, Form, Request
+from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pwdlib import PasswordHash
-from sqlalchemy import inspect, text
+from sqlalchemy import func, inspect, text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
 from database import Base, SessionLocal, engine, get_db
-from models import MembershipPlan, User
+from models import MembershipPlan, MembershipSelection, User
 
 
 app = FastAPI(title="Gym Membership & Workout Planner")
@@ -296,10 +296,17 @@ def member_dashboard(request: Request, db: Session = Depends(get_db)):
     if user.role == "admin":
         return RedirectResponse(url="/admin/dashboard", status_code=303)
 
+    selection = (
+        db.query(MembershipSelection)
+        .filter(MembershipSelection.user_id == user.id)
+        .first()
+    )
+    selected_plan = db.get(MembershipPlan, selection.plan_id) if selection else None
+
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
-        context={"user": user},
+        context={"user": user, "selected_plan": selected_plan},
     )
 
 
@@ -350,9 +357,27 @@ def membership_plans(request: Request, db: Session = Depends(get_db)):
         .all()
     )
     user = None
+    selected_plan_id = None
     user_id = request.session.get("user_id")
     if user_id is not None:
         user = db.get(User, user_id)
+        if user is None:
+            request.session.clear()
+        elif user.role == "user":
+            selection = (
+                db.query(MembershipSelection)
+                .filter(MembershipSelection.user_id == user.id)
+                .first()
+            )
+            if selection is not None:
+                selected_plan_id = selection.plan_id
+
+    query_error = request.query_params.get("error")
+    error_messages = {
+        "members_only": "Only regular member accounts can select a plan.",
+        "unavailable": "That plan is no longer available. Please choose another plan.",
+        "save_failed": "We couldn't save your selection. Please try again.",
+    }
 
     return templates.TemplateResponse(
         request=request,
@@ -362,8 +387,121 @@ def membership_plans(request: Request, db: Session = Depends(get_db)):
             "signed_in": user is not None,
             "dashboard_url": dashboard_url(user) if user else "/dashboard",
             "user_role": user.role if user else None,
+            "selected_plan_id": selected_plan_id,
+            "selection_success": request.query_params.get("selected") == "1",
+            "selection_error": error_messages.get(query_error),
         },
     )
+
+
+@app.get("/membership-plans/{slug}")
+def membership_plan_detail(
+    request: Request,
+    slug: str,
+    db: Session = Depends(get_db),
+):
+    """Show full details for one active membership plan. Browsing is public."""
+    plan = (
+        db.query(MembershipPlan)
+        .filter(
+            MembershipPlan.slug == slug,
+            MembershipPlan.is_active.is_(True),
+        )
+        .first()
+    )
+    if plan is None:
+        raise HTTPException(status_code=404, detail="Membership plan not found.")
+
+    user = None
+    selected_plan_id = None
+    user_id = request.session.get("user_id")
+    if user_id is not None:
+        user = db.get(User, user_id)
+        if user is None:
+            request.session.clear()
+        elif user.role == "user":
+            selection = (
+                db.query(MembershipSelection)
+                .filter(MembershipSelection.user_id == user.id)
+                .first()
+            )
+            if selection is not None:
+                selected_plan_id = selection.plan_id
+
+    return templates.TemplateResponse(
+        request=request,
+        name="membership_detail.html",
+        context={
+            "plan": plan,
+            "signed_in": user is not None,
+            "user_role": user.role if user else None,
+            "dashboard_url": dashboard_url(user) if user else "/dashboard",
+            "selected_plan_id": selected_plan_id,
+            "is_current_plan": selected_plan_id == plan.id,
+        },
+    )
+
+
+@app.post("/membership-plans/select")
+def select_membership_plan(
+    request: Request,
+    plan_id: int = Form(...),
+    db: Session = Depends(get_db),
+):
+    # Selection must always be tied to the authenticated user's database ID.
+    user_id = request.session.get("user_id")
+    if user_id is None:
+        return RedirectResponse(url="/login", status_code=303)
+
+    user = db.get(User, user_id)
+    if user is None:
+        request.session.clear()
+        return RedirectResponse(url="/login", status_code=303)
+
+    # Admins can manage the site but do not take out member subscriptions.
+    if user.role != "user":
+        return RedirectResponse(
+            url="/membership-plans?error=members_only",
+            status_code=303,
+        )
+
+    plan = (
+        db.query(MembershipPlan)
+        .filter(
+            MembershipPlan.id == plan_id,
+            MembershipPlan.is_active.is_(True),
+        )
+        .first()
+    )
+    if plan is None:
+        return RedirectResponse(
+            url="/membership-plans?error=unavailable",
+            status_code=303,
+        )
+
+    selection = (
+        db.query(MembershipSelection)
+        .filter(MembershipSelection.user_id == user.id)
+        .first()
+    )
+    if selection is None:
+        selection = MembershipSelection(user_id=user.id, plan_id=plan.id)
+        db.add(selection)
+    else:
+        # One current plan per member; choosing another replaces the current one.
+        selection.plan_id = plan.id
+        selection.selected_at = func.now()
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        return RedirectResponse(
+            url="/membership-plans?error=save_failed",
+            status_code=303,
+        )
+
+    return RedirectResponse(url="/membership-plans?selected=1", status_code=303)
 
 
 @app.post("/logout")

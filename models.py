@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, Integer, JSON, String, func
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, JSON, String, func
 from database import Base
 
 
@@ -32,3 +32,29 @@ class MembershipPlan(Base):
     is_featured = Column(Boolean, default=False, nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     sort_order = Column(Integer, default=0, nullable=False)
+
+
+class MembershipSelection(Base):
+    """The single currently selected membership plan for each regular user."""
+
+    __tablename__ = "membership_selections"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        unique=True,
+        index=True,
+        nullable=False,
+    )
+    plan_id = Column(
+        Integer,
+        ForeignKey("membership_plans.id", ondelete="RESTRICT"),
+        index=True,
+        nullable=False,
+    )
+    selected_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False,
+    )

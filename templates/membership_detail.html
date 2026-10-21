@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f2efe7">
+    <title>{{ plan.name }} Membership Details | Gym Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/membership.css">
+</head>
+<body class="plans-body">
+    <main class="plans-shell">
+        <header class="plans-nav">
+            <a href="/" class="plans-wordmark" aria-label="Gym Planner home">GYM <span>PLANNER</span></a>
+            <nav class="plans-nav-actions" aria-label="Account navigation">
+                <a class="nav-link" href="/membership-plans">All plans <span aria-hidden="true">↗</span></a>
+                {% if signed_in %}
+                    {% if user_role == "admin" %}
+                        <a class="nav-link" href="/admin/dashboard">Admin dashboard <span aria-hidden="true">↗</span></a>
+                    {% else %}
+                        <a class="nav-link" href="{{ dashboard_url }}">Dashboard <span aria-hidden="true">↗</span></a>
+                    {% endif %}
+                    <form method="post" action="/logout">
+                        <button class="nav-button" type="submit">Sign out</button>
+                    </form>
+                {% else %}
+                    <a class="nav-link" href="/login">Sign in <span aria-hidden="true">↗</span></a>
+                    <a class="nav-button" href="/register">Create account</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <div class="detail-breadcrumb">
+            <a href="/membership-plans">Membership plans</a>
+            <span aria-hidden="true">/</span>
+            <span>{{ plan.name }}</span>
+        </div>
+
+        <section class="detail-hero" aria-labelledby="detail-title">
+            <div class="detail-heading-block">
+                <p class="plans-eyebrow">MEMBERSHIP / PLAN DETAILS</p>
+                <p class="detail-plan-kicker">{% if plan.is_featured %}MOST POPULAR PLAN{% else %}MEMBERSHIP OPTION{% endif %}</p>
+                <h1 id="detail-title">{{ plan.name }}<span>.</span></h1>
+                <p class="detail-tagline">{{ plan.tagline }}</p>
+                <p class="detail-description">{{ plan.description }}</p>
+            </div>
+
+            <aside class="detail-price-panel" aria-label="Membership price and selection">
+                <p class="detail-panel-label">MONTHLY MEMBERSHIP</p>
+                <div class="detail-price"><span>₹</span>{{ "{:,.0f}".format(plan.price_monthly) }}<small>/ month</small></div>
+                <div class="detail-price-rule"></div>
+                {% if user_role == "user" %}
+                    {% if is_current_plan %}
+                        <div class="current-plan-badge detail-current-badge">✓ YOUR CURRENT PLAN</div>
+                        <p class="detail-status-copy">This plan is saved to your Gym Planner account.</p>
+                        <a class="detail-secondary-link" href="/membership-plans">Browse other plans ↗</a>
+                    {% else %}
+                        <form method="post" action="/membership-plans/select" class="plan-selection-form js-plan-selection-form" data-plan-name="{{ plan.name }}" data-plan-price="₹{{ '{:,.0f}'.format(plan.price_monthly) }} / month" data-is-switch="{{ 'true' if selected_plan_id else 'false' }}">
+                            <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                            <button class="plan-select-button detail-select-button" type="submit">
+                                {% if selected_plan_id %}Switch to this plan{% else %}Select this plan{% endif %}<span aria-hidden="true">→</span>
+                            </button>
+                        </form>
+                        <p class="detail-status-copy">Your selection is saved to your account. This page does not process payments.</p>
+                    {% endif %}
+                {% elif user_role == "admin" %}
+                    <p class="detail-status-copy">You are viewing this plan as an administrator. Member accounts select their own plans.</p>
+                    <a class="detail-admin-link" href="/admin/dashboard">Go to admin dashboard ↗</a>
+                {% else %}
+                    <a class="plan-select-button detail-select-button detail-select-link" href="/login">Sign in to select this plan <span aria-hidden="true">→</span></a>
+                    <p class="detail-status-copy">Already have an account? Sign in to save your choice.</p>
+                {% endif %}
+            </aside>
+        </section>
+
+        <section class="detail-content-grid" aria-label="Membership plan information">
+            <article class="detail-features-panel">
+                <p class="plans-eyebrow">WHAT'S INCLUDED</p>
+                <h2>Everything in your plan.</h2>
+                <p class="detail-section-intro">Here is what comes with the {{ plan.name }} membership.</p>
+                <ul class="detail-feature-list">
+                    {% for feature in plan.features %}
+                        <li><span class="detail-feature-check" aria-hidden="true">✓</span><span>{{ feature }}</span></li>
+                    {% else %}
+                        <li>Plan benefits will be updated soon.</li>
+                    {% endfor %}
+                </ul>
+            </article>
+
+            <aside class="detail-facts-panel">
+                <p class="plans-eyebrow">AT A GLANCE</p>
+                <div class="detail-fact-row"><span>Plan</span><strong>{{ plan.name }}</strong></div>
+                <div class="detail-fact-row"><span>Price</span><strong>₹{{ "{:,.0f}".format(plan.price_monthly) }} / month</strong></div>
+                <div class="detail-fact-row"><span>Availability</span><strong>Available</strong></div>
+                <div class="detail-fact-row"><span>Selection</span><strong>{% if is_current_plan %}Already selected{% elif user_role == "user" %}Ready to select{% else %}Sign-in required{% endif %}</strong></div>
+                <p class="detail-disclaimer">Prices are displayed per month for this project demo. Payment processing and paid-subscription activation are not part of this feature.</p>
+            </aside>
+        </section>
+
+        <section class="detail-bottom">
+            <div>
+                <p class="plans-eyebrow">KEEP YOUR ROUTINE MOVING</p>
+                <h2>Found your fit?</h2>
+                <p>Compare the other options any time before making your choice.</p>
+            </div>
+            <a class="bottom-link" href="/membership-plans">Compare all plans <span aria-hidden="true">↗</span></a>
+        </section>
+        <footer class="plans-footer"><span>SHOW UP. GET STRONGER.</span><span>GYM PLANNER · MEMBERSHIP DETAILS</span></footer>
+    </main>
+
+    <div class="plan-modal" id="plan-confirm-modal" hidden>
+        <div class="plan-modal-backdrop" data-close-plan-modal></div>
+        <section class="plan-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="plan-modal-title" aria-describedby="plan-modal-description">
+            <div class="plan-modal-topline">
+                <p class="plans-eyebrow">MEMBERSHIP / CONFIRMATION</p>
+                <button class="plan-modal-close" type="button" aria-label="Close confirmation" data-close-plan-modal>×</button>
+            </div>
+            <p class="plan-modal-step">YOUR NEXT STEP</p>
+            <h2 id="plan-modal-title">Make it official.</h2>
+            <p class="plan-modal-description" id="plan-modal-description">Review your membership choice before confirming.</p>
+            <div class="plan-modal-summary">
+                <div><span class="plan-modal-label">SELECTED PLAN</span><strong class="plan-modal-name" id="plan-modal-name">Membership plan</strong></div>
+                <div class="plan-modal-price" id="plan-modal-price">₹0 / month</div>
+            </div>
+            <p class="plan-modal-switch-note" id="plan-modal-switch-note" hidden>This will replace your current plan selection.</p>
+            <div class="plan-modal-actions">
+                <button class="plan-modal-secondary" type="button" data-close-plan-modal>Go back</button>
+                <button class="plan-modal-confirm" type="button" id="confirm-plan-selection">Confirm selection <span aria-hidden="true">→</span></button>
+            </div>
+            <p class="plan-modal-footnote">You can review your selection on your dashboard.</p>
+        </section>
+    </div>
+
+    <script>
+        (() => {
+            const modal = document.getElementById("plan-confirm-modal");
+            const planName = document.getElementById("plan-modal-name");
+            const planPrice = document.getElementById("plan-modal-price");
+            const description = document.getElementById("plan-modal-description");
+            const switchNote = document.getElementById("plan-modal-switch-note");
+            const confirmButton = document.getElementById("confirm-plan-selection");
+            let activeForm = null;
+            let previousFocus = null;
+
+            const closeModal = () => {
+                modal.hidden = true;
+                document.body.classList.remove("plan-modal-open");
+                activeForm = null;
+                confirmButton.disabled = false;
+                confirmButton.innerHTML = 'Confirm selection <span aria-hidden="true">→</span>';
+                if (previousFocus && typeof previousFocus.focus === "function") previousFocus.focus();
+            };
+
+            document.querySelectorAll(".js-plan-selection-form").forEach((form) => {
+                form.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    activeForm = form;
+                    previousFocus = document.activeElement;
+                    const name = form.dataset.planName || "this plan";
+                    const price = form.dataset.planPrice || "";
+                    const isSwitch = form.dataset.isSwitch === "true";
+                    planName.textContent = name;
+                    planPrice.textContent = price;
+                    description.textContent = isSwitch
+                        ? "You're about to change your membership to " + name + "."
+                        : "You're about to select " + name + " as your membership plan.";
+                    switchNote.hidden = !isSwitch;
+                    modal.hidden = false;
+                    document.body.classList.add("plan-modal-open");
+                    confirmButton.focus();
+                });
+            });
+
+            document.querySelectorAll("[data-close-plan-modal]").forEach((button) => button.addEventListener("click", closeModal));
+            confirmButton.addEventListener("click", () => {
+                if (!activeForm) return;
+                confirmButton.disabled = true;
+                confirmButton.textContent = "Saving selection…";
+                HTMLFormElement.prototype.submit.call(activeForm);
+            });
+            document.addEventListener("keydown", (event) => {
+                if (modal.hidden) return;
+                if (event.key === "Escape") { event.preventDefault(); closeModal(); }
+                if (event.key === "Tab") {
+                    const focusable = modal.querySelectorAll('button:not([disabled])');
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+                    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

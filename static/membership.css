@@ -62,6 +62,22 @@ a { color: inherit; }
 .plan-card--featured .plan-features li { color: #e2e2da; }
 .feature-check { flex: 0 0 auto; color: var(--olive); font-weight: 800; }
 .plan-card--featured .feature-check { color: #c8d0ae; }
+
+.selection-alert { margin-top: 20px; padding: 13px 16px; font-size: 12px; line-height: 1.6; border: 1px solid var(--line); }
+.selection-alert--success { background: #e7eddf; color: #34452f; border-color: #cbd5bf; }
+.selection-alert--error { background: #f7e8e4; color: #813d32; border-color: #e4c3ba; }
+.current-plan-note { margin: 18px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.plan-selection-area { margin-top: auto; padding-top: 24px; }
+.plan-selection-form { margin: 0; }
+.plan-select-button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 15px; border: 1px solid var(--ink); background: var(--ink); color: #fff; text-decoration: none; font: 700 12px Manrope, sans-serif; cursor: pointer; transition: background .18s ease, color .18s ease; }
+.plan-select-button:hover { background: transparent; color: var(--ink); }
+.plan-card--featured .plan-select-button { border-color: var(--surface); background: var(--surface); color: var(--ink); }
+.plan-card--featured .plan-select-button:hover { background: transparent; color: var(--surface); }
+.plan-select-link { box-sizing: border-box; }
+.current-plan-badge { display: inline-flex; align-items: center; gap: 7px; padding: 10px 12px; border: 1px solid #cbd5bf; background: #e7eddf; color: #34452f; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+.selection-help { color: var(--muted); font-size: 11px; line-height: 1.6; }
+.plan-card--featured .selection-help { color: var(--featured-muted); }
+
 .empty-plans { grid-column: 1 / -1; padding: 30px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
 .plans-bottom { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin-top: 54px; padding: 26px 0 30px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .plans-bottom h2 { margin: 10px 0 7px; font: 600 clamp(23px, 3vw, 32px)/1.2 "Space Grotesk", sans-serif; letter-spacing: -.045em; }
@@ -91,4 +107,248 @@ a { color: inherit; }
     .plan-description { min-height: 0; }
     .plans-bottom { align-items: flex-start; flex-direction: column; margin-top: 36px; }
     .plans-footer { flex-direction: column; gap: 8px; }
+}
+
+
+/* Branded membership confirmation modal (replaces the browser's native confirm popup). */
+.plan-modal[hidden] { display: none !important; }
+.plan-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 22px;
+}
+.plan-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(25, 26, 22, .62);
+    animation: plan-modal-fade-in .16s ease-out both;
+}
+.plan-modal-dialog {
+    position: relative;
+    width: min(100%, 490px);
+    padding: clamp(24px, 4vw, 36px);
+    background: var(--cream);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    box-shadow: 0 18px 52px rgba(20, 21, 17, .18);
+    animation: plan-modal-rise-in .2s ease-out both;
+}
+.plan-modal-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.plan-modal-close {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    font: 400 25px/1 "Manrope", sans-serif;
+    cursor: pointer;
+    transition: background .16s ease, border-color .16s ease;
+}
+.plan-modal-close:hover { background: var(--surface); border-color: var(--ink); }
+.plan-modal-step {
+    margin: 26px 0 9px;
+    color: var(--olive);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .16em;
+}
+.plan-modal-dialog h2 {
+    margin: 0;
+    font: 600 clamp(30px, 5vw, 40px)/1.05 "Space Grotesk", sans-serif;
+    letter-spacing: -.06em;
+}
+.plan-modal-description {
+    margin: 14px 0 22px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.75;
+}
+.plan-modal-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+.plan-modal-summary > div:first-child { display: grid; gap: 7px; }
+.plan-modal-label {
+    color: var(--olive);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .13em;
+}
+.plan-modal-name {
+    font: 600 22px/1.1 "Space Grotesk", sans-serif;
+    letter-spacing: -.04em;
+}
+.plan-modal-price {
+    flex: 0 0 auto;
+    font: 600 19px/1.1 "Space Grotesk", sans-serif;
+    letter-spacing: -.04em;
+    text-align: right;
+}
+.plan-modal-switch-note {
+    margin: 13px 0 0;
+    color: var(--olive);
+    font-size: 11px;
+    line-height: 1.6;
+}
+.plan-modal-switch-note[hidden] { display: none; }
+.plan-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+.plan-modal-secondary, .plan-modal-confirm {
+    min-height: 46px;
+    padding: 0 17px;
+    border: 1px solid var(--ink);
+    font: 700 11px "Manrope", sans-serif;
+    cursor: pointer;
+    transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.plan-modal-secondary { background: transparent; color: var(--ink); }
+.plan-modal-secondary:hover { background: var(--surface); }
+.plan-modal-confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--ink);
+    color: #fff;
+}
+.plan-modal-confirm:hover { background: var(--olive); border-color: var(--olive); }
+.plan-modal-confirm:disabled { opacity: .72; cursor: wait; }
+.plan-modal-footnote {
+    margin: 17px 0 0;
+    color: #77776f;
+    font-size: 9px;
+    line-height: 1.6;
+}
+.plan-modal-open { overflow: hidden; }
+.plan-modal button:focus-visible { outline: 2px solid var(--olive); outline-offset: 3px; }
+@keyframes plan-modal-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes plan-modal-rise-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 480px) {
+    .plan-modal { padding: 14px; }
+    .plan-modal-dialog { padding: 23px 20px; }
+    .plan-modal-summary { align-items: flex-start; flex-direction: column; gap: 13px; }
+    .plan-modal-price { text-align: left; }
+    .plan-modal-actions { flex-direction: column-reverse; }
+    .plan-modal-secondary, .plan-modal-confirm { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .plan-modal-backdrop, .plan-modal-dialog { animation: none; }
+}
+
+/* Plan details links on the membership overview cards. */
+.plan-details-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 15px;
+    color: var(--olive);
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+}
+.plan-details-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.plan-card--featured .plan-details-link { color: #c8d0ae; }
+
+/* Dedicated membership detail page. */
+.detail-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    color: #77776f;
+    font-size: 10px;
+    letter-spacing: .03em;
+}
+.detail-breadcrumb a { color: var(--olive); font-weight: 800; text-decoration: none; }
+.detail-breadcrumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(290px, .65fr);
+    align-items: center;
+    gap: clamp(34px, 6vw, 86px);
+    padding: 48px 0 54px;
+    border-bottom: 1px solid var(--line);
+}
+.detail-heading-block { max-width: 700px; }
+.detail-plan-kicker {
+    margin: 36px 0 12px;
+    color: var(--olive);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .15em;
+}
+.detail-heading-block h1 {
+    margin: 0;
+    font: 600 clamp(58px, 8vw, 100px)/.96 "Space Grotesk", sans-serif;
+    letter-spacing: -.08em;
+    overflow-wrap: anywhere;
+}
+.detail-heading-block h1 span { color: var(--olive); }
+.detail-tagline { margin: 20px 0 0; color: var(--olive); font-size: 16px; font-weight: 700; }
+.detail-description { max-width: 520px; margin: 15px 0 0; color: var(--muted); font-size: 14px; line-height: 1.85; }
+.detail-price-panel {
+    padding: clamp(23px, 3vw, 32px);
+    background: var(--surface);
+    border: 1px solid var(--line);
+}
+.detail-panel-label { margin: 0 0 20px; color: var(--olive); font-size: 9px; font-weight: 800; letter-spacing: .15em; }
+.detail-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; font: 600 clamp(36px, 4.6vw, 51px)/1 "Space Grotesk", sans-serif; letter-spacing: -.07em; }
+.detail-price > span { font: 500 21px/1 "Manrope", sans-serif; letter-spacing: 0; }
+.detail-price small { margin-left: 5px; color: var(--muted); font: 500 11px/1.2 "Manrope", sans-serif; letter-spacing: 0; }
+.detail-price-rule { height: 1px; margin: 24px 0 21px; background: var(--line); }
+.detail-select-button { min-height: 51px; font-size: 12px; }
+.detail-select-link { box-sizing: border-box; }
+.detail-current-badge { margin-bottom: 4px; }
+.detail-status-copy { margin: 13px 0 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+.detail-secondary-link, .detail-admin-link { display: inline-block; margin-top: 17px; color: var(--ink); font-size: 11px; font-weight: 800; text-decoration: none; border-bottom: 1px solid var(--olive); padding-bottom: 5px; }
+.detail-secondary-link:hover, .detail-admin-link:hover { color: var(--olive); }
+.detail-content-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(270px, .75fr); gap: 16px; padding-top: 28px; }
+.detail-features-panel, .detail-facts-panel { padding: clamp(23px, 3.5vw, 34px); border: 1px solid var(--line); background: var(--surface); }
+.detail-features-panel h2 { margin: 14px 0 8px; font: 600 clamp(25px, 3vw, 34px)/1.12 "Space Grotesk", sans-serif; letter-spacing: -.05em; }
+.detail-section-intro { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.detail-feature-list { display: grid; gap: 0; list-style: none; margin: 26px 0 0; padding: 0; }
+.detail-feature-list li { display: flex; align-items: flex-start; gap: 12px; padding: 15px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
+.detail-feature-check { flex: 0 0 auto; color: var(--olive); font-weight: 800; }
+.detail-facts-panel .plans-eyebrow { margin-bottom: 20px; }
+.detail-fact-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 15px 0; border-top: 1px solid var(--line); font-size: 11px; }
+.detail-fact-row > span { color: var(--muted); }
+.detail-fact-row strong { text-align: right; font-weight: 800; }
+.detail-disclaimer { margin: 18px 0 0; padding-top: 17px; border-top: 1px solid var(--line); color: #77776f; font-size: 10px; line-height: 1.75; }
+.detail-bottom { display: flex; align-items: center; justify-content: space-between; gap: 26px; margin-top: 38px; padding: 27px 0 30px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.detail-bottom h2 { margin: 10px 0 7px; font: 600 clamp(23px, 3vw, 32px)/1.15 "Space Grotesk", sans-serif; letter-spacing: -.045em; }
+.detail-bottom p:not(.plans-eyebrow) { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+@media (max-width: 800px) {
+    .detail-hero { grid-template-columns: 1fr; gap: 26px; padding: 36px 0 39px; }
+    .detail-price-panel { max-width: none; }
+    .detail-content-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+    .detail-breadcrumb { margin-top: 18px; }
+    .detail-plan-kicker { margin-top: 29px; }
+    .detail-heading-block h1 { font-size: clamp(54px, 16vw, 76px); }
+    .detail-tagline { font-size: 14px; }
+    .detail-description { font-size: 12px; }
+    .detail-hero { padding-top: 31px; }
+    .detail-bottom { align-items: flex-start; flex-direction: column; }
 }
