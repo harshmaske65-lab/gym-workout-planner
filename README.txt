@@ -1,56 +1,29 @@
-GYM WORKOUT PLANNER — SCRUM-21: VIEW MEMBERSHIP DETAILS
+GYM WORKOUT PLANNER — WHITE-BOX TESTS
 
-WHAT THIS UPDATE ADDS
-- Adds a dedicated detail page for each active membership plan at /membership-plans/{slug}.
-- Adds a "View plan details" link to every card on the membership plans overview page.
-- Displays the selected plan's name, tagline, description, monthly price, and included features using values from the existing SQLite database.
-- Lets signed-in members see whether the plan is already selected and select/switch plans using the existing POST /membership-plans/select endpoint and confirmation modal.
-- Lets visitors view details without signing in; selecting a plan still requires a member account.
-- Keeps admin accounts in read-only browse mode for member-plan selection.
-- Adds a direct "View membership details" link on the member dashboard when a plan has been selected.
-- Keeps the same cream/charcoal/olive visual design.
+FILES
+- tests/conftest.py: configures an isolated temporary SQLite test database.
+- tests/test_authentication.py: registration, login, password, session and role branches.
+- tests/test_memberships.py: plan listing/details, access control, selection and switching branches.
+- pytest.ini: configures test discovery.
 
-FILES TO UPDATE
-1. Replace main.py with this version (adds HTTPException import and the GET /membership-plans/{slug} route).
-2. Replace templates/membership_plans.html with this version (adds details links to each plan card; preserves the custom confirmation modal).
-3. Add templates/membership_detail.html.
-4. Replace static/membership.css with this version (includes plan-detail and card-link styling and keeps existing styles/modal).
-5. Replace templates/dashboard.html with this version (keeps the large browse plans button and adds a selected-plan details link).
+SETUP IN VS CODE
+1. Extract these files into the ROOT of your existing Gym Workout Planner project. The `tests` folder must sit next to `main.py`, `models.py`, and `database.py`.
+2. Open the VS Code terminal at the project root (same folder as `main.py`).
+3. Install test dependencies in your existing venv:
+   .\venv\Scripts\python.exe -m pip install pytest pytest-cov httpx
+4. Ensure the app's normal dependencies are installed too, including FastAPI, SQLAlchemy, pwdlib with Argon2 support, python-multipart, and Jinja2.
 
-KEEP THESE EXISTING FILES
-- database.py
-- gym.db
-- .session_secret
-- models.py (no model/database schema changes are needed)
-- templates/login.html
-- templates/register.html
-- templates/admin_dashboard.html
-- static/style.css
-- static/gym-editorial.jpg
-- promote_admin.py
+RUN THE TESTS
+   .\venv\Scripts\python.exe -m pytest -v
 
-BACKUP FIRST
-Back up main.py, templates/membership_plans.html, templates/dashboard.html and static/membership.css before replacing them. Do not delete or overwrite gym.db.
+BRANCH COVERAGE REPORT
+   .\venv\Scripts\python.exe -m pytest --cov=main --cov=models --cov-branch --cov-report=term-missing --cov-report=html
+Then open `htmlcov\index.html` to inspect covered and missed lines/branches.
 
-RUN
-From the project root:
-  .\venv\Scripts\python.exe -m uvicorn main:app --reload
+DATABASE SAFETY
+These tests replace the `database` module only inside the pytest process with a temporary SQLite database before importing the app. They do not intentionally read or write the project's real `gym.db`. Run pytest from the project root so the existing `templates/` and `static/` directories resolve correctly. Tests create only temporary users and selections. Do not include real database files or secrets in the test bundle or commit them to GitHub.
 
-OPEN
-  http://127.0.0.1:8000/membership-plans
-Click "View plan details" on any plan card, or open e.g.:
-  http://127.0.0.1:8000/membership-plans/starter
-  http://127.0.0.1:8000/membership-plans/plus
-  http://127.0.0.1:8000/membership-plans/elite
+SCOPE
+The tests exercise internal decision branches through FastAPI's TestClient, which is appropriate for branch-oriented white-box testing of the current routes. The suite was syntax-checked but not executed against your local project. Use actual pytest output for the final report; do not mark tests as passed until they have run.
 
-TEST CHECKLIST
-1. Open each plan's detail page and verify the name, description, price and features reflect the database.
-2. Use an invalid slug and verify a 404 response.
-3. Browse as a logged-out visitor; details should render, but selection requires signing in.
-4. Sign in as a regular member; confirm that the selected plan is marked as current, or select/switch plans using the custom modal.
-5. Sign in as admin and verify that plan details can be viewed but the member selection action is not offered.
-6. From the member dashboard, click "View membership details" for the selected plan.
-
-NOTES
-- Prices are illustrative demo values, and payment processing / paid subscription activation is not implemented.
-- This feature reads the existing MembershipPlan model. It does not change the database schema.
+If your local `main.py`, model fields, route names, or templates have changed since the version used to prepare these tests, adjust the relevant test assertions to match the current app.

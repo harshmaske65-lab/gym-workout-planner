@@ -4,3 +4,28 @@ __pycache__/
 .env
 .idea/
 .vscode/
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Testing and coverage
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets and environment variables
+.session_secret
+.env
+.env.*
+
+# IDE files
+.vscode/
